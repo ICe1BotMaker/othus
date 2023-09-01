@@ -1,0 +1,22 @@
+{
+    "name": "othus",
+    "version": "0.0.1",
+    "description": "🆕 typescript-based framework",
+    "main": "./dist/index.js",
+    "scripts": {
+        "test": "npx babel src --out-dir dist"
+    },
+    "keywords": [
+        "framework",
+        "typescript"
+    ],
+    "author": "ice1",
+    "license": "Apache License 2.0",
+    "dependencies": {
+        "@babel/cli": "^7.22.10",
+        "@babel/core": "^7.22.11",
+        "@babel/plugin-transform-arrow-functions": "^7.22.5",
+        "@babel/plugin-transform-template-literals": "^7.22.5",
+        "@babel/preset-react": "^7.22.5"
+    }
+}
