@@ -21,17 +21,21 @@ $ npm install othus
 ### 💾 Example
 
 ```ts
-import * as othus from 'othus';
+import othus from 'othus';
 
-const App: othus.ITF = {
-    /* your middleware */
-    middleware: [],
+const cors = () => {};
+
+export const App: othus.ITF = {
+    middleware: [cors()],
     body: (req: object, res: othus.ITF_body_res) => {
-        const elements = othus.compile({
-            p: { textContent: `asdf`, className: `asdf` }
-        });
+        const elements: any = othus.compile([
+            { type: `p`, textContent: `lorem ipsum`, className: `asdf` },
+            { type: `p`, textContent: `lorem ipsum`, className: `as2345df` },
+            { type: `p`, textContent: `lorem ipsum`, className: `샌즈` },
+            { type: `div`, child: { type: `span`, textContent: `test`, className: `test` } }
+        ]);
 
-        res.render(elements);
+        res.send(elements);
     }
 }
 ```
