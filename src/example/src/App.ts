@@ -1,17 +1,19 @@
 import othus from '../../index';
 
-const cors = () => {};
+import { Header } from './components/Header';
+
+const cors = () => () => {};
 
 export const App: othus.ITF = {
     middleware: [cors()],
-    body: (req: object, res: othus.ITF_body_res) => {
-        const elements: any = othus.compile([
-            { type: `p`, textContent: `asdf`, className: `asdf` },
-            { type: `p`, textContent: `3asdf23`, className: `as2345df` },
-            { type: `p`, textContent: `ㅅㄴ주ed`, className: `샌즈` },
-            { type: `div`, child: { type: `span`, textContent: `sansdance`, className: `sansbounce` } }
+    stateOptions: (option: othus.ITF_stateOptions_option): any => option,
+    body: (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
+        const elements: othus.ITFDoc[] = othus.compile([
+            { type: Header },
+            { type: `p`, textContent: String(othus.state(`text`, 0)), className: `count` },
+            { type: `button`, textContent: `count`, className: `count-btn` }
         ]);
 
-        res.send(elements);
+        res.send(elements, req.path);
     }
 }

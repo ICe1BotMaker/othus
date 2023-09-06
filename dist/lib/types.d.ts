@@ -1,26 +1,49 @@
 export interface ITF {
     body: ITF_body;
-    middleware?: any[];
+    path?: string;
+    stateOptions?: ITF_stateOptions;
+    middleware?: Function[];
+}
+export interface ITF_stateOptions {
+    (option: ITF_stateOptions_option): any;
+}
+export interface ITF_stateOptions_option {
+    id: string;
+    dom: ITFDoc;
 }
 export interface ITF_body {
-    (req: object, res: ITF_body_res): any;
+    (req: ITF_body_req, res: ITF_body_res): unknown;
+}
+export interface ITF_body_req {
+    path: string;
 }
 export interface ITF_body_res {
     send: ITF_body_res_send;
 }
 export interface ITF_body_res_send {
-    (element: Element): any;
+    (array: ITFDoc[], path: string): unknown;
 }
 export interface ITFDoc {
-    type: string;
+    type: any;
+    path?: string;
     textContent?: string;
-    className?: (any[] | string);
-    child?: (ITFDoc | null | undefined);
+    className?: (string[] | string);
+    child?: (ITFDoc[] | null);
+    style?: (string | object);
+    onClick?: Function;
+    onChange?: Function;
+    onInput?: Function;
+    onMouseDown?: Function;
+    onMouseMove?: Function;
+    onMouseUp?: Function;
+    onKeyDown?: Function;
+    onKeyUp?: Function;
+    src?: string;
+    href?: string;
 }
-export declare function render(object?: any[]): void;
-export declare function compile(array?: any[]): any[];
-export declare function createElement(type: string, child?: (ITFDoc | null | undefined), node_text?: string): {
-    type: string;
-    child: ITFDoc | null | undefined;
-    node_text: string | undefined;
-};
+export declare const states: any[];
+export declare const state: (name: string, value?: (string | number)) => any;
+export declare const pages: any[];
+export declare function render(array?: ITFDoc[]): void;
+export declare function compile(array?: ITFDoc[]): ITFDoc[];
+export declare function createElement(obj: ITFDoc): string;

@@ -1,3 +1,5 @@
+<img src="./othus.png" width="100%">
+
 # 💫 othus
 🆕 typescript-based framework
 

@@ -5,16 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const index_1 = __importDefault(require("../../index"));
-const cors = () => { };
+const Header_1 = require("./components/Header");
+const cors = () => () => { };
 exports.App = {
     middleware: [cors()],
+    stateOptions: (option) => option,
     body: (req, res) => {
         const elements = index_1.default.compile([
-            { type: `p`, textContent: `asdf`, className: `asdf` },
-            { type: `p`, textContent: `3asdf23`, className: `as2345df` },
-            { type: `p`, textContent: `ㅅㄴ주ed`, className: `샌즈` },
-            { type: `div`, child: { type: `span`, textContent: `sansdance`, className: `sansbounce` } }
+            { type: Header_1.Header },
+            { type: `p`, textContent: String(index_1.default.state(`text`, 0)), className: `count` },
+            { type: `button`, textContent: `count`, className: `count-btn` }
         ]);
-        res.send(elements);
+        res.send(elements, req.path);
     }
 };

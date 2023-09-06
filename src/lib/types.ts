@@ -1,10 +1,27 @@
+import { server } from "./server";
+
 export interface ITF {
     body: ITF_body;
-    middleware?: any[];
+    path?: string;
+    stateOptions?: ITF_stateOptions;
+    middleware?: Function[];
+}
+
+export interface ITF_stateOptions {
+    (option: ITF_stateOptions_option): any;
+}
+
+export interface ITF_stateOptions_option {
+    id: string;
+    dom: ITFDoc;
 }
 
 export interface ITF_body {
-    (req: object, res: ITF_body_res): any;
+    (req: ITF_body_req, res: ITF_body_res): unknown;
+}
+
+export interface ITF_body_req {
+    path: string;
 }
 
 export interface ITF_body_res {
@@ -12,57 +29,154 @@ export interface ITF_body_res {
 }
 
 export interface ITF_body_res_send {
-    (element: Element): any;
+    (array: ITFDoc[], path: string): unknown;
 }
 
 export interface ITFDoc {
-    type: string;
+    type: any;
+
+    path?: string;
+
     textContent?: string;
-    className?: (any[] | string);
-    child?: (ITFDoc | null | undefined);
+    className?: (string[] | string);
+    child?: (ITFDoc[] | null);
+    style?: (string | object);
+
+    onClick?: Function;
+    onChange?: Function;
+    onInput?: Function;
+    onMouseDown?: Function;
+    onMouseMove?: Function;
+    onMouseUp?: Function;
+    onKeyDown?: Function;
+    onKeyUp?: Function;
+    
+    src?: string;
+    href?: string;
 }
 
-export function render(object: any[] = []) {
-    function send(elements: any[] = []) {
-        console.log(JSON.stringify(elements, null, 4));
-    }
+export const states: any[] = [];
 
-    object[0].type.body({}, {
-        send
-    });
-}
-
-export function compile(array: any[] = []) {
-    const foreach = (obj: ITFDoc = { type: `empty` }) => {
-        const result: any[] = [];
-
-        result.push(createElement(obj.type, obj?.child ? obj.child : null, obj.textContent));
-        
-        Object.keys(obj).forEach((key, idx) => {
-            const value = Object.values(obj)[idx];
-
-            if (typeof value === `object`) {
-                foreach(value);
-            }
-        });
-
-        return result;
-    }
-
-    const elements: any[] = [];
-    array.forEach(object => {
-        if (Array.isArray(foreach(object)) && foreach(object).length === 1) {
-            elements.push(foreach(object)[0]);
+export const state = (name: string, value?: (string | number)) => {
+    let result: any;
+    states.forEach(state => {
+        if (state.name === name) {
+            result = state;
         }
     });
-    
-    return elements;
+
+    if (typeof value === `undefined`) {
+        return result.value;
+    } else {
+        if (typeof result === `undefined`) {
+            states.push({ name, value });
+
+            let result: any;
+            states.forEach(state => {
+                if (state.name === name) {
+                    result = state;
+                }
+            });
+            
+            return result.value;
+        } else {
+            let result: any;
+            states.forEach(state => {
+                if (state.name === name) {
+                    state.value = value;
+                    result = state;
+                }
+            });
+            
+            return result.value;
+        }
+    }
 }
 
-export function createElement(type: string, child?: (ITFDoc | null | undefined), node_text?: string) {
-    // const element = document.createElement(type);
-    // if (node_text) element.textContent = node_text;
-    // if (child) element.appendChild(child);
-    // return element;
-    return { type, child, node_text };
+// export const reqresset = () => {
+//     const request = {};
+//     const response = { send };
+// }
+
+export const pages: any[] = [];
+
+export function render(array: ITFDoc[] = []) {
+    const send = (arr: ITFDoc[] = [], path: string) => {
+        const parse = (obj: ITFDoc, idx: number) => {
+            if (typeof obj.type?.body === `undefined`) {
+                let result;
+                pages.forEach(page => {
+                    if (page.path === path) {
+                        result = page;
+                    }
+                });
+
+                if (typeof result === `undefined`) {
+                    const page = {
+                        path: path,
+                        view: ``
+                    };
+
+                    page.view += createElement(obj);
+                    pages.push(page);
+                } else {
+                    pages.forEach(page => {
+                        if (page.path === path) {
+                            page.view += createElement(obj);
+                        }
+                    });
+                }
+            } else {
+                const request = {};
+                const response = { send };
+                obj.type.body(request, response);
+            }
+        }
+
+        arr.forEach((e, idx) => parse(e, idx));
+        server();
+    }
+
+    let componentElements: any[] = [];
+    let otherElements: ITFDoc[] = [];
+
+    array.forEach(element => {
+        if (typeof element.type?.body === `function`) {
+            componentElements.push({ element, path: element.path });
+        } else {
+            otherElements.push(element);
+        }
+    });
+
+    send(otherElements, `/`);
+
+    componentElements.forEach(element => {
+        const request = { path: element.path };
+        const response = { send };
+        element.element.type?.body?.(request, response);
+    });
+
+
+    console.log(pages);
+}
+
+export function compile(array: ITFDoc[] = []) {
+    return array;
+}
+
+export function createElement(obj: ITFDoc): string {
+    return `
+<${obj.type} ${
+    obj.className ? 
+    `class="${
+        Array.isArray(obj.className) ? 
+        obj.className.join(` `) 
+        : 
+        obj.className
+    }"` 
+    : 
+    ``
+}>
+    ${obj.textContent ? obj.textContent : (obj.child ? obj.child.map(e => createElement(e)).join(``) : ``)}
+</${obj.type}>`;
 }

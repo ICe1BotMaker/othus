@@ -1,41 +1,118 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createElement = exports.compile = exports.render = void 0;
-function render(object = []) {
-    function send(elements = []) {
-        console.log(JSON.stringify(elements, null, 4));
-    }
-    object[0].type.body({}, {
-        send
+exports.createElement = exports.compile = exports.render = exports.pages = exports.state = exports.states = void 0;
+const server_1 = require("./server");
+exports.states = [];
+const state = (name, value) => {
+    let result;
+    exports.states.forEach(state => {
+        if (state.name === name) {
+            result = state;
+        }
     });
+    if (typeof value === `undefined`) {
+        return result.value;
+    }
+    else {
+        if (typeof result === `undefined`) {
+            exports.states.push({ name, value });
+            let result;
+            exports.states.forEach(state => {
+                if (state.name === name) {
+                    result = state;
+                }
+            });
+            return result.value;
+        }
+        else {
+            let result;
+            exports.states.forEach(state => {
+                if (state.name === name) {
+                    state.value = value;
+                    result = state;
+                }
+            });
+            return result.value;
+        }
+    }
+};
+exports.state = state;
+// export const reqresset = () => {
+//     const request = {};
+//     const response = { send };
+// }
+exports.pages = [];
+function render(array = []) {
+    const send = (arr = [], path) => {
+        const parse = (obj, idx) => {
+            var _a;
+            if (typeof ((_a = obj.type) === null || _a === void 0 ? void 0 : _a.body) === `undefined`) {
+                let result;
+                exports.pages.forEach(page => {
+                    if (page.path === path) {
+                        result = page;
+                    }
+                });
+                if (typeof result === `undefined`) {
+                    const page = {
+                        path: path,
+                        view: ``
+                    };
+                    page.view += createElement(obj);
+                    exports.pages.push(page);
+                }
+                else {
+                    exports.pages.forEach(page => {
+                        if (page.path === path) {
+                            page.view += createElement(obj);
+                        }
+                    });
+                }
+            }
+            else {
+                const request = {};
+                const response = { send };
+                obj.type.body(request, response);
+            }
+        };
+        arr.forEach((e, idx) => parse(e, idx));
+        (0, server_1.server)();
+    };
+    let componentElements = [];
+    let otherElements = [];
+    array.forEach(element => {
+        var _a;
+        if (typeof ((_a = element.type) === null || _a === void 0 ? void 0 : _a.body) === `function`) {
+            componentElements.push({ element, path: element.path });
+        }
+        else {
+            otherElements.push(element);
+        }
+    });
+    send(otherElements, `/`);
+    componentElements.forEach(element => {
+        var _a, _b;
+        const request = { path: element.path };
+        const response = { send };
+        (_b = (_a = element.element.type) === null || _a === void 0 ? void 0 : _a.body) === null || _b === void 0 ? void 0 : _b.call(_a, request, response);
+    });
+    console.log(exports.pages);
 }
 exports.render = render;
 function compile(array = []) {
-    const foreach = (obj = { type: `empty` }) => {
-        const result = [];
-        result.push(createElement(obj.type, (obj === null || obj === void 0 ? void 0 : obj.child) ? obj.child : null, obj.textContent));
-        Object.keys(obj).forEach((key, idx) => {
-            const value = Object.values(obj)[idx];
-            if (typeof value === `object`) {
-                foreach(value);
-            }
-        });
-        return result;
-    };
-    const elements = [];
-    array.forEach(object => {
-        if (Array.isArray(foreach(object)) && foreach(object).length === 1) {
-            elements.push(foreach(object)[0]);
-        }
-    });
-    return elements;
+    return array;
 }
 exports.compile = compile;
-function createElement(type, child, node_text) {
-    // const element = document.createElement(type);
-    // if (node_text) element.textContent = node_text;
-    // if (child) element.appendChild(child);
-    // return element;
-    return { type, child, node_text };
+function createElement(obj) {
+    return `
+<${obj.type} ${obj.className ?
+        `class="${Array.isArray(obj.className) ?
+            obj.className.join(` `)
+            :
+                obj.className}"`
+        :
+            ``}>
+    ${obj.textContent ? obj.textContent : (obj.child ? obj.child.map(e => createElement(e)).join(``) : ``)}
+</${obj.type}>`;
 }
 exports.createElement = createElement;
