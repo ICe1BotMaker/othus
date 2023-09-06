@@ -3,7 +3,7 @@
 # 💫 othus
 🆕 typescript-based framework
 
-***Links: [npm](), [github]()***
+***Links: [npm](https://www.npmjs.com/package/othus), [github](https://github.com/kithub-Inc/othus)***
 
 ### 💬 Differences from express
 - Create an **xml grammar** from within the **typescript** file.
