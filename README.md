@@ -17,27 +17,47 @@ $ npm install othus
 ```
 
 ### 📂 Recommended Directory Structure
-...
+```
+index.ts
+src/
+    components/
+        Header.ts
+    App.ts
+```
 
 
 ### 💾 Example
 
+`index.ts`
 ```ts
 import othus from 'othus';
 
-const cors = () => {};
+import { App } from './src/App';
+
+othus.render([
+    { type: App, path: `/` }
+]);
+```
+
+`src/App.ts`
+```ts
+import othus from 'othus';
+
+import { Header } from './components/Header';
+
+const cors = () => () => {};
 
 export const App: othus.ITF = {
     middleware: [cors()],
-    body: (req: object, res: othus.ITF_body_res) => {
-        const elements: any = othus.compile([
-            { type: `p`, textContent: `lorem ipsum`, className: `asdf` },
-            { type: `p`, textContent: `lorem ipsum`, className: `as2345df` },
-            { type: `p`, textContent: `lorem ipsum`, className: `샌즈` },
-            { type: `div`, child: { type: `span`, textContent: `test`, className: `test` } }
+    stateOptions: (option: othus.ITF_stateOptions_option): any => option,
+    body: (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
+        const elements: othus.ITFDoc[] = othus.compile([
+            { type: Header },
+            { type: `p`, textContent: String(othus.state(`text`, 0)), className: `count` },
+            { type: `button`, textContent: `count`, className: `count-btn` }
         ]);
 
-        res.send(elements);
+        res.send(elements, req.path);
     }
 }
 ```

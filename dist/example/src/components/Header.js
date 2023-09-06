@@ -14,6 +14,6 @@ exports.Header = {
                     { type: `div`, className: `header-item`, textContent: `item-3` }
                 ] }
         ]);
-        res.send(elements, ``);
+        res.send(elements, `/`);
     }
 };

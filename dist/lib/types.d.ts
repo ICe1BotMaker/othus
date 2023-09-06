@@ -23,6 +23,14 @@ export interface ITF_body_res {
 export interface ITF_body_res_send {
     (array: ITFDoc[], path: string): unknown;
 }
+export interface ITF_page {
+    path: string;
+    html: string;
+}
+export interface ITF_state {
+    name: string;
+    value: any;
+}
 export interface ITFDoc {
     type: any;
     path?: string;
@@ -41,9 +49,9 @@ export interface ITFDoc {
     src?: string;
     href?: string;
 }
-export declare const states: any[];
+export declare const states: ITF_state[];
 export declare const state: (name: string, value?: (string | number)) => any;
-export declare const pages: any[];
+export declare const pages: ITF_page[];
 export declare function render(array?: ITFDoc[]): void;
 export declare function compile(array?: ITFDoc[]): ITFDoc[];
 export declare function createElement(obj: ITFDoc): string;

@@ -10,6 +10,6 @@ export const Header: othus.ITF = {
             ] }
         ]);
 
-        res.send(elements, ``);
+        res.send(elements, `/`);
     }
 }

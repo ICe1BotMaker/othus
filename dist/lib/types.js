@@ -4,7 +4,7 @@ exports.createElement = exports.compile = exports.render = exports.pages = expor
 const server_1 = require("./server");
 exports.states = [];
 const state = (name, value) => {
-    let result;
+    let result = { name: ``, value: `` };
     exports.states.forEach(state => {
         if (state.name === name) {
             result = state;
@@ -16,7 +16,7 @@ const state = (name, value) => {
     else {
         if (typeof result === `undefined`) {
             exports.states.push({ name, value });
-            let result;
+            let result = { name: ``, value: `` };
             exports.states.forEach(state => {
                 if (state.name === name) {
                     result = state;
@@ -25,7 +25,7 @@ const state = (name, value) => {
             return result.value;
         }
         else {
-            let result;
+            let result = { name: ``, value: `` };
             exports.states.forEach(state => {
                 if (state.name === name) {
                     state.value = value;
@@ -37,10 +37,6 @@ const state = (name, value) => {
     }
 };
 exports.state = state;
-// export const reqresset = () => {
-//     const request = {};
-//     const response = { send };
-// }
 exports.pages = [];
 function render(array = []) {
     const send = (arr = [], path) => {
@@ -56,15 +52,15 @@ function render(array = []) {
                 if (typeof result === `undefined`) {
                     const page = {
                         path: path,
-                        view: ``
+                        html: ``
                     };
-                    page.view += createElement(obj);
+                    page.html += createElement(obj);
                     exports.pages.push(page);
                 }
                 else {
                     exports.pages.forEach(page => {
                         if (page.path === path) {
-                            page.view += createElement(obj);
+                            page.html += createElement(obj);
                         }
                     });
                 }
@@ -76,7 +72,6 @@ function render(array = []) {
             }
         };
         arr.forEach((e, idx) => parse(e, idx));
-        (0, server_1.server)();
     };
     let componentElements = [];
     let otherElements = [];
@@ -96,7 +91,10 @@ function render(array = []) {
         const response = { send };
         (_b = (_a = element.element.type) === null || _a === void 0 ? void 0 : _a.body) === null || _b === void 0 ? void 0 : _b.call(_a, request, response);
     });
-    console.log(exports.pages);
+    exports.pages.forEach(page => {
+        (0, server_1.createPage)(page.path, page.html);
+    });
+    (0, server_1.server)(3000);
 }
 exports.render = render;
 function compile(array = []) {

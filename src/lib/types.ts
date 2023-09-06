@@ -1,4 +1,4 @@
-import { server } from "./server";
+import { createPage, server } from "./server";
 
 export interface ITF {
     body: ITF_body;
@@ -32,6 +32,16 @@ export interface ITF_body_res_send {
     (array: ITFDoc[], path: string): unknown;
 }
 
+export interface ITF_page {
+    path: string;
+    html: string;
+}
+
+export interface ITF_state {
+    name: string;
+    value: any;
+}
+
 export interface ITFDoc {
     type: any;
 
@@ -55,10 +65,10 @@ export interface ITFDoc {
     href?: string;
 }
 
-export const states: any[] = [];
+export const states: ITF_state[] = [];
 
 export const state = (name: string, value?: (string | number)) => {
-    let result: any;
+    let result: ITF_state = { name: ``, value: `` };
     states.forEach(state => {
         if (state.name === name) {
             result = state;
@@ -71,7 +81,7 @@ export const state = (name: string, value?: (string | number)) => {
         if (typeof result === `undefined`) {
             states.push({ name, value });
 
-            let result: any;
+            let result: ITF_state = { name: ``, value: `` };
             states.forEach(state => {
                 if (state.name === name) {
                     result = state;
@@ -80,7 +90,7 @@ export const state = (name: string, value?: (string | number)) => {
             
             return result.value;
         } else {
-            let result: any;
+            let result: ITF_state = { name: ``, value: `` };
             states.forEach(state => {
                 if (state.name === name) {
                     state.value = value;
@@ -93,18 +103,13 @@ export const state = (name: string, value?: (string | number)) => {
     }
 }
 
-// export const reqresset = () => {
-//     const request = {};
-//     const response = { send };
-// }
-
-export const pages: any[] = [];
+export const pages: ITF_page[] = [];
 
 export function render(array: ITFDoc[] = []) {
     const send = (arr: ITFDoc[] = [], path: string) => {
         const parse = (obj: ITFDoc, idx: number) => {
             if (typeof obj.type?.body === `undefined`) {
-                let result;
+                let result: (ITF_page | undefined);
                 pages.forEach(page => {
                     if (page.path === path) {
                         result = page;
@@ -112,17 +117,17 @@ export function render(array: ITFDoc[] = []) {
                 });
 
                 if (typeof result === `undefined`) {
-                    const page = {
+                    const page: ITF_page = {
                         path: path,
-                        view: ``
+                        html: ``
                     };
 
-                    page.view += createElement(obj);
+                    page.html += createElement(obj);
                     pages.push(page);
                 } else {
                     pages.forEach(page => {
                         if (page.path === path) {
-                            page.view += createElement(obj);
+                            page.html += createElement(obj);
                         }
                     });
                 }
@@ -134,7 +139,6 @@ export function render(array: ITFDoc[] = []) {
         }
 
         arr.forEach((e, idx) => parse(e, idx));
-        server();
     }
 
     let componentElements: any[] = [];
@@ -156,8 +160,11 @@ export function render(array: ITFDoc[] = []) {
         element.element.type?.body?.(request, response);
     });
 
+    pages.forEach(page => {
+        createPage(page.path, page.html);
+    });
 
-    console.log(pages);
+    server(3000);
 }
 
 export function compile(array: ITFDoc[] = []) {
