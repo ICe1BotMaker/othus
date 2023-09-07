@@ -10,7 +10,7 @@ export const App: othus.ITF = {
     body: (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
         res.state(`text`, `0`);
 
-        const count = () => res.state(`text`, Number(res.state(`text`)) + 1);
+        const count = (req: othus.ITF_body_req, res: othus.ITF_body_res) => res.state(`text`, Number(res.state(`text`)) + 1);
 
         const elements: othus.ITFDoc[] = othus.compile([
             { type: Header },

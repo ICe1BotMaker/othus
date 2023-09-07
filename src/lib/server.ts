@@ -17,7 +17,7 @@ export function server(port: number) {
             res.write(uglify.minify(fs.readFileSync(`./bundle.js`, `utf-8`).replace(`/* &*_-jsbo_-_*& */`, `pages = ${JSON.stringify(pages)}`)).code);
         } else {
             res.writeHead(200, { 'Content-type': 'text/html; charset=utf-8' });
-            res.write(`<script src="/bundle.js"></script>`);
+            res.write(`<script src="/bundle.js" nocode async></script>`);
         }
 
         res.end();

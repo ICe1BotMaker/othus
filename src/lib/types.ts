@@ -56,7 +56,7 @@ export interface ITFDoc {
 
     id?: string;
 
-    textContent?: string;
+    textContent?: (string | ITF_state);
     className?: (string[] | string);
     child?: (ITFDoc[] | null);
     style?: (string | object);
@@ -129,7 +129,7 @@ export function render(array: ITFDoc[] = []) {
         });
     
         if (typeof value === `undefined`) {
-            return result.value;
+            return result;
         } else {
             if (result.name.trim() === `` && result.value.trim() === ``) {
                 states.push({ name, value });
@@ -141,7 +141,7 @@ export function render(array: ITFDoc[] = []) {
                     }
                 });
                 
-                return result.value;
+                return result;
             } else {
                 let result: ITF_state = { name: ``, value: `` };
                 states.forEach(state => {
@@ -151,7 +151,7 @@ export function render(array: ITFDoc[] = []) {
                     }
                 });
                 
-                return result.value;
+                return result;
             }
         }
     }

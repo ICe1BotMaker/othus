@@ -41,7 +41,7 @@ export interface ITFDoc {
     type: any;
     path?: string;
     id?: string;
-    textContent?: string;
+    textContent?: (string | ITF_state);
     className?: (string[] | string);
     child?: (ITFDoc[] | null);
     style?: (string | object);

@@ -53,7 +53,7 @@ function render(array = []) {
             }
         });
         if (typeof value === `undefined`) {
-            return result.value;
+            return result;
         }
         else {
             if (result.name.trim() === `` && result.value.trim() === ``) {
@@ -64,7 +64,7 @@ function render(array = []) {
                         result = state;
                     }
                 });
-                return result.value;
+                return result;
             }
             else {
                 let result = { name: ``, value: `` };
@@ -74,7 +74,7 @@ function render(array = []) {
                         result = state;
                     }
                 });
-                return result.value;
+                return result;
             }
         }
     };
