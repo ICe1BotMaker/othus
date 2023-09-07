@@ -1,6 +1,6 @@
 {
     "name": "othus",
-    "version": "0.0.2b",
+    "version": "0.0.3b",
     "description": "🆕 typescript-based framework",
     "main": "./dist/index.js",
     "scripts": {
@@ -17,8 +17,10 @@
         "@babel/core": "^7.22.11",
         "@babel/plugin-transform-arrow-functions": "^7.22.5",
         "@babel/plugin-transform-template-literals": "^7.22.5",
+        "@types/uglify-js": "^3.17.2",
         "chalk": "^4.1.2",
         "http": "^0.0.1-security",
-        "nodemon": "^3.0.1"
+        "nodemon": "^3.0.1",
+        "uglify-js": "^3.17.4"
     }
 }

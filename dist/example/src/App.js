@@ -11,10 +11,13 @@ exports.App = {
     middleware: [cors()],
     stateOptions: (option) => option,
     body: (req, res) => {
+        res.state(`text`, `0`);
+        const count = () => res.state(`text`, Number(res.state(`text`)) + 1);
         const elements = index_1.default.compile([
             { type: Header_1.Header },
-            { type: `p`, textContent: String(index_1.default.state(`text`, 0)), className: `count` },
-            { type: `button`, textContent: `count`, className: `count-btn` }
+            { type: `p`, textContent: res.state(`text`), className: `count` },
+            { type: `button`, textContent: `count`, className: `count-btn`, onClick: count.toString() },
+            { type: `a`, href: `/other`, textContent: `link` }
         ]);
         res.send(elements, req.path);
     }

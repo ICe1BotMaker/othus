@@ -1,4 +1,4 @@
-<img src="./othus.png" width="100%">
+<img src="https://raw.githubusercontent.com/kithub-Inc/othus/master/othus.png" width="100%">
 
 # 💫 othus
 🆕 typescript-based framework

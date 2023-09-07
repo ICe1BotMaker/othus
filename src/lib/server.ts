@@ -1,23 +1,24 @@
+import fs from 'fs';
 import http from 'http';
 import chalk from 'chalk';
+import uglify from 'uglify-js';
 
 import { ITF_page } from './types';
 
 export const pages: ITF_page[] = [];
 
-export function createPage(path: string, html: string) {
-    pages.push({ path, html });
+export function createPage({ path, json, states, html }: ITF_page) {
+    pages.push({ path, json, states, html });
 }
 
 export function server(port: number) {
     const httpServer = http.createServer((req, res) => {
-        res.writeHead(200, { 'Content-type': 'text/html; charset=utf-8' });
-
-        pages.forEach((page: ITF_page) => {
-            if (req.url === page.path) {
-                res.write(page.html);
-            }
-        });
+        if (req.url === `/bundle.js`) {
+            res.write(uglify.minify(fs.readFileSync(`./bundle.js`, `utf-8`).replace(`/* &*_-jsbo_-_*& */`, `pages = ${JSON.stringify(pages)}`)).code);
+        } else {
+            res.writeHead(200, { 'Content-type': 'text/html; charset=utf-8' });
+            res.write(`<script src="/bundle.js"></script>`);
+        }
 
         res.end();
     });

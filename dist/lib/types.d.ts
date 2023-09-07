@@ -19,12 +19,18 @@ export interface ITF_body_req {
 }
 export interface ITF_body_res {
     send: ITF_body_res_send;
+    state: ITF_body_res_state;
 }
 export interface ITF_body_res_send {
     (array: ITFDoc[], path: string): unknown;
 }
+export interface ITF_body_res_state {
+    (name: string, value?: any): string;
+}
 export interface ITF_page {
     path: string;
+    json: ITFDoc[];
+    states: ITF_state[];
     html: string;
 }
 export interface ITF_state {
@@ -34,23 +40,22 @@ export interface ITF_state {
 export interface ITFDoc {
     type: any;
     path?: string;
+    id?: string;
     textContent?: string;
     className?: (string[] | string);
     child?: (ITFDoc[] | null);
     style?: (string | object);
-    onClick?: Function;
-    onChange?: Function;
-    onInput?: Function;
-    onMouseDown?: Function;
-    onMouseMove?: Function;
-    onMouseUp?: Function;
-    onKeyDown?: Function;
-    onKeyUp?: Function;
+    onClick?: (Function | string);
+    onChange?: (Function | string);
+    onInput?: (Function | string);
+    onMouseDown?: (Function | string);
+    onMouseMove?: (Function | string);
+    onMouseUp?: (Function | string);
+    onKeyDown?: (Function | string);
+    onKeyUp?: (Function | string);
     src?: string;
     href?: string;
 }
-export declare const states: ITF_state[];
-export declare const state: (name: string, value?: (string | number)) => any;
 export declare const pages: ITF_page[];
 export declare function render(array?: ITFDoc[]): void;
 export declare function compile(array?: ITFDoc[]): ITFDoc[];
