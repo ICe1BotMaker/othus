@@ -12,7 +12,11 @@ exports.App = {
     stateOptions: (option) => option,
     body: (req, res) => {
         res.state(`text`, `0`);
-        const count = (req, res) => res.state(`text`, Number(res.state(`text`)) + 1);
+        let idx = 0;
+        const count = (req, res) => {
+            idx += 1;
+            res.state(`text`, String(idx));
+        };
         const elements = index_1.default.compile([
             { type: Header_1.Header },
             { type: `p`, textContent: res.state(`text`), className: `count` },

@@ -25,7 +25,7 @@ export interface ITF_body_res_send {
     (array: ITFDoc[], path: string): unknown;
 }
 export interface ITF_body_res_state {
-    (name: string, value?: any): string;
+    (name: string, value?: string): string;
 }
 export interface ITF_page {
     path: string;
@@ -35,7 +35,7 @@ export interface ITF_page {
 }
 export interface ITF_state {
     name: string;
-    value: any;
+    value: string;
 }
 export interface ITFDoc {
     type: any;
@@ -55,6 +55,7 @@ export interface ITFDoc {
     onKeyUp?: (Function | string);
     src?: string;
     href?: string;
+    value?: string;
 }
 export declare const pages: ITF_page[];
 export declare function render(array?: ITFDoc[]): void;

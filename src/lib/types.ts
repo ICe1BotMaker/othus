@@ -34,7 +34,7 @@ export interface ITF_body_res_send {
 }
 
 export interface ITF_body_res_state {
-    (name: string, value?: any): string;
+    (name: string, value?: string): string;
 }
 
 export interface ITF_page {
@@ -46,7 +46,7 @@ export interface ITF_page {
 
 export interface ITF_state {
     name: string;
-    value: any;
+    value: string;
 }
 
 export interface ITFDoc {
@@ -72,6 +72,7 @@ export interface ITFDoc {
     
     src?: string;
     href?: string;
+    value?: string;
 }
 
 export const pages: ITF_page[] = [];
@@ -120,7 +121,7 @@ export function render(array: ITFDoc[] = []) {
         arr.forEach(e => parse(e));
     }
     
-    const state = (name: string, value?: (string | number)) => {
+    const state = (name: string, value?: string) => {
         let result: ITF_state = { name: ``, value: `` };
         states.forEach(state => {
             if (state.name === name) {

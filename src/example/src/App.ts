@@ -9,8 +9,12 @@ export const App: othus.ITF = {
     stateOptions: (option: othus.ITF_stateOptions_option): any => option,
     body: (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
         res.state(`text`, `0`);
+        let idx = 0;
 
-        const count = (req: othus.ITF_body_req, res: othus.ITF_body_res) => res.state(`text`, Number(res.state(`text`)) + 1);
+        const count = (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
+            idx += 1;
+            res.state(`text`, String(idx));
+        };
 
         const elements: othus.ITFDoc[] = othus.compile([
             { type: Header },
