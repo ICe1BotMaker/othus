@@ -52,7 +52,6 @@ window.onload = () => {
 
     let pages = [];
     /* &*_-jsbo_-_*& */
-    let interval;
     let child_list = [
         "id",
 

@@ -1,10 +1,10 @@
 {
     "name": "othus",
-    "version": "0.0.4b",
+    "version": "3.17b-ynrtf56cde",
     "description": "🆕 typescript-based framework",
     "main": "./dist/index.js",
     "scripts": {
-        "test": "npx babel src --out-dir dist"
+        "build": "npx babel dist --out-dir static"
     },
     "keywords": [
         "framework",
@@ -13,14 +13,19 @@
     "author": "ice1",
     "license": "Apache License 2.0",
     "dependencies": {
-        "@babel/cli": "^7.22.10",
-        "@babel/core": "^7.22.11",
+        "@babel/cli": "^7.22.15",
+        "@babel/core": "^7.22.17",
         "@babel/plugin-transform-arrow-functions": "^7.22.5",
         "@babel/plugin-transform-template-literals": "^7.22.5",
+        "@babel/preset-env": "^7.22.15",
         "@types/uglify-js": "^3.17.2",
         "chalk": "^4.1.2",
         "http": "^0.0.1-security",
         "nodemon": "^3.0.1",
         "uglify-js": "^3.17.4"
+    },
+    "devDependencies": {
+        "@babel/plugin-syntax-jsx": "^7.22.5",
+        "@babel/preset-react": "^7.22.15"
     }
 }
