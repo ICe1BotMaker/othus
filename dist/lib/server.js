@@ -25,7 +25,7 @@ function server(port) {
         res.end();
     });
     httpServer.listen(port, () => {
-        console.clear();
+        // console.clear();
         console.log(chalk_1.default.blue(`local :: othus-beta.v1`));
         console.log(chalk_1.default.bold.underline(`This is not a safe version yet.`));
         console.log();

@@ -1,6 +1,32 @@
 "use strict";
 
 window.onload = () => {
+    let viewer = [];
+
+    const parse = (page, obj) => {
+        if (typeof obj?.textContent === `object` && obj.textContent.name && obj.textContent.value ? true : false) {
+            let result;
+            page.states.forEach(state => {
+                if (state.name === obj.textContent.name) {
+                    result = state;
+                }
+            });
+
+            obj.textContent = result.value;
+            viewer.push(createElement(page, obj));
+        } else {
+            viewer.push(createElement(page, obj));
+        }
+
+        Object.keys(obj).forEach((key, idx) => {
+            const value = Object.values(obj)[idx];
+
+            if (key === `child` && Array.isArray(value)) {
+                value.forEach(e => parse(page, e));
+            }
+        });
+    }
+
     const createElement = (page, obj) => {
         const element = document.createElement(obj.type);
 
@@ -8,17 +34,6 @@ window.onload = () => {
             const value = Object.values(obj)[idx];
             
             if (child_list.includes(key)) {
-                if (typeof value === `object` && value.name && value.value ? true : false) {
-                    let result;
-                    page.states.forEach(state => {
-                        if (state.name === value.name) {
-                            result = state;
-                        }
-                    });
-
-                    obj.textContent = result.value;
-                }
-
                 if (key !== `textContent`) element.setAttribute(key, value);
                 else element.textContent = obj.textContent;
             }
@@ -33,8 +48,15 @@ window.onload = () => {
                                 result = state;
                             }
                         });
-
                         
+                        viewer = [];
+                
+                        page.json.forEach(element => parse(page, element));
+                        
+                        document.querySelector(`body #root`).innerHTML = ``;
+                        viewer.forEach(view => {
+                            document.querySelector(`body #root`).append(view);
+                        });
 
                         return result;
                     }
@@ -81,21 +103,9 @@ window.onload = () => {
             // setInterval(() => {
                 document.querySelector(`body #root`).innerHTML = ``;
                 
-                let viewer = [];
-    
-                const parse = obj => {
-                    viewer.push(createElement(page, obj));
-    
-                    Object.keys(obj).forEach((key, idx) => {
-                        const value = Object.values(obj)[idx];
+                viewer = [];
         
-                        if (key === `child` && Array.isArray(value)) {
-                            value.forEach(e => parse(e));
-                        }
-                    })
-                }
-        
-                page.json.forEach(element => parse(element));
+                page.json.forEach(element => parse(page, element));
                 
                 viewer.forEach(view => {
                     document.querySelector(`body #root`).appendChild(view);
