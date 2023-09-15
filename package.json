@@ -1,6 +1,6 @@
 {
     "name": "othus",
-    "version": "3.17.1b-ynrtf56cde",
+    "version": "3.17.2b-ynrtf56cde",
     "description": "🆕 typescript-based framework",
     "main": "./dist/index.js",
     "scripts": {
@@ -10,6 +10,7 @@
         "framework",
         "typescript"
     ],
+    "files": ["/dist"],
     "author": "ice1",
     "license": "Apache License 2.0",
     "dependencies": {
@@ -27,5 +28,6 @@
     "devDependencies": {
         "@babel/plugin-syntax-jsx": "^7.22.5",
         "@babel/preset-react": "^7.22.15"
-    }
+    },
+    "repository": "https://github.com/kithub-Inc/othus"
 }

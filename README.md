@@ -18,28 +18,28 @@ $ npm install othus
 
 ### 📂 Recommended Directory Structure
 ```
-index.ts
+index.tsxo
 src/
     components/
-        Header.ts
-    App.ts
+        Header.tsxo
+    App.tsxo
 ```
 
 
 ### 💾 Example
 
-`index.ts`
+`index.tsxo`
 ```ts
 import othus from 'othus';
 
 import { App } from './src/App';
 
-othus.render([
-    { type: App, path: `/` }
-]);
+othus.render(
+    <App path="/" />
+);
 ```
 
-`src/App.ts`
+`src/App.tsxo`
 ```ts
 import othus from 'othus';
 
@@ -49,13 +49,18 @@ const cors = () => () => {};
 
 export const App: othus.ITF = {
     middleware: [cors()],
-    stateOptions: (option: othus.ITF_stateOptions_option): any => option,
+    stateOptions: (option: othus.ITF_stateOptions_option) => option,
     body: (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
-        const elements: othus.ITFDoc[] = othus.compile([
-            { type: Header },
-            { type: `p`, textContent: String(othus.state(`text`, 0)), className: `count` },
-            { type: `button`, textContent: `count`, className: `count-btn` }
-        ]);
+        res.state(`text`, `0`);
+
+        const count = (req: othus.ITF_body_req, res: othus.ITF_body_res) => {
+            res.state(`text`, res.state(`text`) + 1);
+        };
+				
+		const elements: othus.ITFDoc[] = othus.compile(
+			<p className="count">{res.state(`text`)}</p>
+            <p className="count-btn" onClick={count}>count</p>
+        );
 
         res.send(elements, req.path);
     }
