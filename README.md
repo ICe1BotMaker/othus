@@ -57,8 +57,8 @@ export const App: othus.ITF = {
             res.state(`text`, res.state(`text`) + 1);
         };
 				
-		const elements: othus.ITFDoc[] = othus.compile(
-			<p className="count">{res.state(`text`)}</p>
+        const elements: othus.ITFDoc[] = othus.compile(
+            <p className="count">{res.state(`text`)}</p>
             <p className="count-btn" onClick={count}>count</p>
         );
 
