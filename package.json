@@ -1,6 +1,6 @@
 {
     "name": "othus",
-    "version": "3.17.21b-ynrtf56cde",
+    "version": "3.17.22b-ynrtf56cde",
     "description": "🆕 typescript-based framework",
     "main": "./dist/index.js",
     "scripts": {
