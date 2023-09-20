@@ -18,17 +18,17 @@ $ npm install othus
 
 ### 📂 Recommended Directory Structure
 ```
-index.tsxo
+index.ts
 src/
     components/
-        Header.tsxo
-    App.tsxo
+        Header.ts
+    App.ts
 ```
 
 
 ### 💾 Example
 
-`index.tsxo`
+`index.ts`
 ```ts
 import othus from 'othus';
 
@@ -39,7 +39,7 @@ othus.render(
 );
 ```
 
-`src/App.tsxo`
+`src/App.ts`
 ```ts
 import othus from 'othus';
 
